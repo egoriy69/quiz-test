@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>User Page</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+
+    <form th:action="@{/logout}" method="get">
+        <button class="btn btn-md btn-danger btn-block" name="registration"
+                type="Submit">Logout
+        </button>
+    </form>
+
+    <div class="panel-group" style="margin-top:40px">
+        <div class="panel panel-primary">
+            <form action="#" th:action="@{/user/quiz/{path}(path=${sheet.getQuizId()})}" th:object="${sheet}"
+                  method="post">
+                <input type="hidden" th:value="${sheet.getSize()}" th:field="*{size}"/>
+                <h1 th:text="${sheet.getQuizName()}">Quiz Name</h1>
+                <div th:each="q, iterStat: ${sheet.getQuestions()}">
+                    <p th:text="${sheet.getTexts()[iterStat.index]}">Question</p>
+                    <fieldset>
+                        <div th:each="opt, iterStat2: ${sheet.getOptions()[iterStat.index]}">
+                            <div th:unless="${sheet.getQuestions()[iterStat.index].isSingleAnswer()}">
+                                <input type="checkbox" class="custom-control-input"
+                                       th:field="*{answers[__${iterStat.index}__][__${iterStat2.index}__]}"/>
+                                <label class="custom-control-label" th:text="${opt}">Label</label>
+                            </div>
+                            <div class="form-group" th:if="${sheet.getQuestions()[iterStat.index].isSingleAnswer()}">
+                                <input type="radio" class="custom-control-input"
+                                       th:value="true"
+                                       th:field="*{answers[__${iterStat.index}__][__${iterStat2.index}__]}"
+                                       th:name="${iterStat.index}"/>
+                                <label class="custom-control-label" th:text="${opt}">Label</label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <button class="btn btn-md btn-success btn-block" type="Submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

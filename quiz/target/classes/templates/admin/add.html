@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>User Page</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+
+    <form th:action="@{/logout}" method="get">
+        <button class="btn btn-md btn-danger btn-block" name="registration"
+                type="Submit">Logout
+        </button>
+    </form>
+
+    <div class="panel-group" style="margin-top:40px">
+        <div class="panel panel-primary">
+            <h1 th:text="${quizName}">Quiz Name</h1>
+            <form action="#" th:action="@{/admin/quizes/{path}(path=${quizId})}" th:object="${qp}" method="post">
+                <div>
+                    <label class="custom-control-label" th:for="qt">Question Text</label>
+                    <input type="text" th:field="*{questionText}" id="qt" size="100"/>
+                </div>
+                <div>
+                    <label class="custom-control-label" th:for="sv">Single alnswer</label>
+                    <input type="checkbox" th:field="*{singleAnswer}"/>
+                </div>
+                <div th:each="o, iterStat: ${qp.getOptions()}">
+                    <input type="checkbox" class="custom-control-input" th:field="*{correctAnswers[__${iterStat.index}__]}"/>
+                    <input type="text" th:field="*{options[__${iterStat.index}__]}" size="100"/>
+                </div>
+
+                <button class="btn btn-md btn-success btn-block" type="Submit">Add Question</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
